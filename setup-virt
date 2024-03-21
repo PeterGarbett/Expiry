@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+#	Setup virtual environment
+#
+
+virtualenv .
+source ./bin/activate
+pip install pillow
