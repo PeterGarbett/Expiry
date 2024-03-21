@@ -1,0 +1,14 @@
+#
+#	This file needs to be on /etc/systemd/system/
+#
+[Unit]
+Description=Remove time expired image files
+
+[Service]
+Type=simple
+ExecStart=/home/embed/expiry/bin/python3 /home/embed/expiry/expiry.py /var/www/html/ 3
+User=embed
+
+[Install]
+WantedBy=multi-user.target
+

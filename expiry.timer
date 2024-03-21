@@ -1,0 +1,17 @@
+#
+#	Expired image file deletion. Once a day cleanup
+#
+#       This file needs to be on /etc/systemd/system/
+#
+
+[Unit]
+Description=Schedule image file cleanup
+Requires=expiry.service
+
+[Timer]
+Unit=expiry.service
+OnCalendar=*_*_* 01:00:00 
+
+
+[Install]
+WantedBy=timers.target
