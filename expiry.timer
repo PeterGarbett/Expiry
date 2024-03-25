@@ -6,11 +6,11 @@
 
 [Unit]
 Description=Schedule image file cleanup
-Requires=expiry.service
 
 [Timer]
 Unit=expiry.service
-OnCalendar=*_*_* 01:00:00 
+OnBootSec=15min
+OnUnitActiveSec=1d
 
 
 [Install]
