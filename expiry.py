@@ -9,10 +9,11 @@
 #   by date.
 #
 
+import sys
 import os
-import shutil
 import glob
 import datetime
+from PIL import Image 
 
 dryRun = False
 
@@ -49,10 +50,6 @@ def txtTimestampToTime(filename):
     return (filename, when)
 
 
-from os import listdir
-from PIL import Image
-
-
 def check_image(base, filename):
 
     debug = False
@@ -65,14 +62,13 @@ def check_image(base, filename):
         I.close()
         return True
     except (IOError, SyntaxError) as e:
-        if True:
+        if debug:
             print("Bad file:", filename, e)  # print out the names of corrupt files
         return False
 
 
 def delete_old_image_files(folder, ageLimit):
 
-    debug = True
 
     # folder is the name of the folder in which we
     # have to perform the delete operation
@@ -96,8 +92,9 @@ def delete_old_image_files(folder, ageLimit):
                 command = "sudo rm -f " + folder + imgnames[index] + " > /dev/null 2>&1"
                 if not dryRun:
                     print("Remove corrupt jpg via command :", command)
-                    response = os.system(command)
-            except:
+                    os.system(command)
+            except Exception as e:
+                print(e)
                 pass
 
     imgnames = sorted(glob.glob("2*.jpg"))
@@ -110,7 +107,7 @@ def delete_old_image_files(folder, ageLimit):
     for index in range(len(when)):
         if when[index][1] < expiryTime:
             if not dryRun:
-                response = os.system(
+                os.system(
                     "sudo rm -f " + when[index][0] + " > /dev/null 2>&1"
                 )
             print("Delete:", when[index][0])
@@ -118,7 +115,6 @@ def delete_old_image_files(folder, ageLimit):
             break  # List is sorted by date so there won't be any more
 
 
-import sys
 
 if __name__ == "__main__":
 
@@ -129,7 +125,7 @@ if __name__ == "__main__":
         print(
             "Incorrect usage! Should be : <path>/expiry <directory> <time limit in days>"
         )
-        exit()
+        sys.exit()
 
     try:
         ageLimit = int(inputargs[1])
@@ -137,7 +133,7 @@ if __name__ == "__main__":
         print(
             "Incorrect usage! Should be : <path>/expiry <directory> <time limit in days>"
         )
-        exit()
+        sys.exit()
 
     print(
         "Delete corrupt images and images older than ",
@@ -148,6 +144,4 @@ if __name__ == "__main__":
 
     delete_old_image_files(inputargs[0], ageLimit)
 
-
-
-
+    sys.exit()
