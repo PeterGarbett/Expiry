@@ -14,6 +14,7 @@ import os
 import glob
 import datetime
 from PIL import Image 
+import tidy
 
 dryRun = False
 
@@ -114,7 +115,9 @@ def delete_old_image_files(folder, ageLimit):
         else:
             break  # List is sorted by date so there won't be any more
 
+    # Remove local/non_local duplicates
 
+    tidy.tidy(folder)
 
 if __name__ == "__main__":
 
